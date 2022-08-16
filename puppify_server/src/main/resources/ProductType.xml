@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings xmlns="https://jakarta.ee/xml/ns/persistence/orm"
+                 version="3.0">
+
+    <entity class="com.zrik.puppify.models.ProductType">
+        <table name="product_type" schema="public" catalog="postgres"/>
+        <attributes>
+            <id name="productTypeId">
+                <column name="product_type_id" precision="-1"/>
+            </id>
+            <basic name="productTypeName">
+                <column name="product_type_name"/>
+            </basic>
+            <basic name="productTypeSummary">
+                <column name="product_type_summary"/>
+            </basic>
+            <basic name="image">
+                <column name="image"/>
+            </basic>
+            <basic name="slug">
+                <column name="slug"/>
+            </basic>
+            <basic name="createdAt">
+                <column name="created_at" precision="-1"/>
+            </basic>
+            <basic name="updatedAt">
+                <column name="updated_at" precision="-1"/>
+            </basic>
+            <basic name="updatedOwner">
+                <column name="updated_owner" nullable="false" precision="-1"/>
+            </basic>
+            <one-to-many name="productsByProductTypeId" mapped-by="productTypeByProductTypeId"
+                         target-entity="com.zrik.puppify.models.Product"/>
+        </attributes>
+    </entity>
+</entity-mappings>

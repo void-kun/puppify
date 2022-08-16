@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings xmlns="https://jakarta.ee/xml/ns/persistence/orm"
+                 version="3.0">
+
+    <entity class="com.zrik.puppify.models.Product">
+        <table name="product" schema="public" catalog="postgres"/>
+        <attributes>
+            <id name="productId">
+                <column name="product_id" precision="-1"/>
+            </id>
+            <basic name="productTypeId">
+                <column name="product_type_id" precision="-1"/>
+            </basic>
+            <basic name="supplierId">
+                <column name="supplier_id" precision="-1"/>
+            </basic>
+            <basic name="productName">
+                <column name="product_name"/>
+            </basic>
+            <basic name="productBrief">
+                <column name="product_brief"/>
+            </basic>
+            <basic name="state">
+                <column name="state" precision="-1"/>
+            </basic>
+            <basic name="slug">
+                <column name="slug"/>
+            </basic>
+            <basic name="createdAt">
+                <column name="created_at" precision="-1"/>
+            </basic>
+            <basic name="updatedAt">
+                <column name="updated_at" precision="-1"/>
+            </basic>
+            <basic name="updatedOwner">
+                <column name="updated_owner" nullable="false" precision="-1"/>
+            </basic>
+            <many-to-one name="productTypeByProductTypeId" optional="true"
+                         target-entity="com.zrik.puppify.models.ProductType">
+                <join-column name="product_type_id" referenced-column-name="product_type_id"/>
+            </many-to-one>
+            <many-to-one name="supplierBySupplierId" optional="true" target-entity="com.zrik.puppify.models.Supplier">
+                <join-column name="supplier_id" referenced-column-name="supplier_id"/>
+            </many-to-one>
+            <one-to-many name="productDetailsByProductId" mapped-by="productByProductId"
+                         target-entity="com.zrik.puppify.models.ProductDetail"/>
+        </attributes>
+    </entity>
+</entity-mappings>

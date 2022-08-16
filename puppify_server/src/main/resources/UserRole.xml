@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings xmlns="https://jakarta.ee/xml/ns/persistence/orm"
+                 version="3.0">
+
+    <entity class="com.zrik.puppify.models.UserRole">
+        <table name="user_role" schema="public" catalog="postgres"/>
+        <id-class class="com.zrik.puppify.models.UserRolePK"/>
+        <attributes>
+            <id name="roleId">
+                <column name="role_id" precision="-1"/>
+            </id>
+            <id name="userId">
+                <column name="user_id" precision="-1"/>
+            </id>
+            <basic name="createdAt">
+                <column name="created_at" precision="-1"/>
+            </basic>
+            <basic name="updatedAt">
+                <column name="updated_at" precision="-1"/>
+            </basic>
+            <basic name="updateOwner">
+                <column name="update_owner" nullable="false" precision="-1"/>
+            </basic>
+            <many-to-one name="roleByRoleId" optional="true" target-entity="com.zrik.puppify.models.Role">
+                <join-column name="role_id" referenced-column-name="role_id"/>
+            </many-to-one>
+            <many-to-one name="userByUserId" optional="true" target-entity="com.zrik.puppify.models.User">
+                <join-column name="user_id" referenced-column-name="user_id"/>
+            </many-to-one>
+        </attributes>
+    </entity>
+</entity-mappings>
