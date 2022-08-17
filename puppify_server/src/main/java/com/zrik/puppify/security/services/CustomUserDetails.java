@@ -6,6 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -19,26 +20,36 @@ public class CustomUserDetails implements UserDetails {
     private String email;
     @JsonIgnore
     private String password;
+    @JsonIgnore
+    private Boolean isActive;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public CustomUserDetails(Long id, String username, String email, String password,
+    public CustomUserDetails(Long id, String username, String email, String password, Boolean isActive,
                              Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
+        this.isActive = isActive;
         this.authorities = authorities;
     }
 
     public static CustomUserDetails build(User user) {
-        List<GrantedAuthority> authorities = user.getUserRolesByUserId().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getRoleByRoleId().getRoleName()))
-                .collect(Collectors.toList());
+        List<GrantedAuthority> authorities = new ArrayList<>();
+
+        user.getUserRolesByUserId()
+                .forEach(role ->
+                    role.getRoleByRoleId().getRolePermissionsByRoleId()
+                            .forEach(permission -> new SimpleGrantedAuthority(
+                                    permission.getPermissionByPermissionId().getPermissionName()))
+                );
+
         return new CustomUserDetails(
                 user.getUserId(),
                 user.getUsername(),
                 user.getEmail(),
                 user.getHashPassword(),
+                user.getActived(),
                 authorities);
     }
 
@@ -49,6 +60,8 @@ public class CustomUserDetails implements UserDetails {
     public String getEmail() {
         return email;
     }
+
+    public Boolean getIsActive() { return isActive; }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
