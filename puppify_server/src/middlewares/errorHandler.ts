@@ -23,3 +23,4 @@ const errorHandler = (error: AppError, _request: Request, response: Response, _n
 
 export default errorHandler
 
+
