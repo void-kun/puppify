@@ -1,9 +1,15 @@
 const webpack = require('webpack')
 const path = require('path')
 const nodeExternals = require('webpack-node-externals')
+const WebpackShellPluginNext = require('webpack-shell-plugin-next')
+
+const {
+  NODE_ENV = 'production'
+} = process.env
 
 module.exports = {
-  mode: 'development',
+  mode: NODE_ENV,
+  watch: NODE_ENV === 'development',
   entry: {
     'index': './server.ts'
   },
@@ -22,7 +28,21 @@ module.exports = {
   },
   externals: [nodeExternals()],
   output: {
-    filename: '[name].js',
-    path: path.resolve(__dirname, './js')
-  }
+    filename: 'index.js',
+    path: path.resolve(__dirname, './dist')
+  },
+  plugins: [
+    new WebpackShellPluginNext({
+      onBuildStart: {
+        scripts: ['echo "===> Starting packing with WEBPACK 5"'],
+        blocking: true,
+        parallel: false
+      },
+      onBuildEnd: {
+        scripts: ['yarn run:dev'],
+        blocking: false,
+        parallel: true
+      }
+    })
+  ]
 }

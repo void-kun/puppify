@@ -1,7 +1,11 @@
-import { Router } from 'express'
+import { Router, Request, Response } from 'express'
 
 const router = Router()
 
-router.use()
+router.get('/', (_req: Request, res: Response) => {
+  res.send({
+    message: 'hello world'
+  })
+})
 
 export default router;
