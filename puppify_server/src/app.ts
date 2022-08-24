@@ -1,37 +1,58 @@
 /**
  * External modules
  */
-import express, { Application } from 'express'
-import cors from 'cors'
-import helmet from 'helmet'
+import express, { Application } from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
 
 /**
- * External modules
+ * Internal modules
  */
-import MorganMiddleware from './middlewares/logger'
-import ErrorHandler from './middlewares/errorHandler'
-import config from './config'
-import router from './routes'
+import MorganMiddleware from './middlewares/logger';
+import ErrorHandler from './middlewares/errorHandler';
+import config from './config';
+import router from './routes';
+import logger from './utils/logger';
+import { database } from './config/database';
 
-/**
- * App Variables
- */
-const app: Application = express()
+class Vault {
+  private app: Application;
 
+  constructor() {
+    this.app = express();
+    /**
+     * App Configuration
+     */
+    this.app.use(cors());
+    this.app.use(helmet());
+    this.app.use(express.json());
+    this.app.use(express.urlencoded({ extended: true }));
+    // Middlewares
+    this.app.use(MorganMiddleware);
+    // Routes
+    this.app.use(config.CONTEXT_PATH, router);
+    // Error handler
+    this.app.use(ErrorHandler);
+  }
 
-/**
- * App Configuration
- */
-app.use(cors())
-app.use(helmet())
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
-// Middlewares 
-app.use(MorganMiddleware)
-// Routes
-app.use(config.CONTEXT_PATH, router)
-// Error handler 
-app.use(ErrorHandler)
+  getInstance() {
+    return this.app;
+  }
+}
 
-export default app
+const createInstance = async () => {
+  await database
+    .initialize()
+    .then(() => {
+      logger.info('Database connected!');
+    })
+    .catch((error) => {
+      logger.error(`Database connect error: ${error}`);
+      process.exit(1);
+    });
 
+  const instance = new Vault();
+  return instance;
+};
+
+export default createInstance();

@@ -7,12 +7,22 @@ interface ENV {
   NODE_ENV: string | undefined;
   PORT: number | undefined;
   CONTEXT_PATH: string | undefined;
+  DB_HOST: string | undefined;
+  DB_PORT: number | undefined;
+  DB_USERNAME: string | undefined;
+  DB_PASSWORD: string | undefined;
+  DB_DATABASE: string | undefined;
 }
 
 interface Config {
   NODE_ENV: string;
   PORT: number;
   CONTEXT_PATH: string;
+  DB_HOST: string;
+  DB_PORT: number;
+  DB_USERNAME: string;
+  DB_PASSWORD: string;
+  DB_DATABASE: string;
 }
 
 const getRawConfig = (): ENV => {
@@ -20,6 +30,11 @@ const getRawConfig = (): ENV => {
     NODE_ENV: process.env.NODE_ENV,
     PORT: process.env.PORT ? Number(process.env.PORT) : undefined,
     CONTEXT_PATH: process.env.CONTEXT_PATH,
+    DB_HOST: process.env.DB_HOST,
+    DB_PORT: process.env.DB_PORT ? Number(process.env.DB_PORT) : undefined,
+    DB_USERNAME: process.env.DB_USERNAME,
+    DB_PASSWORD: process.env.DB_PASSWORD,
+    DB_DATABASE: process.env.DB_DATABASE,
   }
 }
 
