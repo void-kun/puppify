@@ -1,7 +1,7 @@
-import path from 'path'
-import dotenv from 'dotenv'
+import path from 'path';
+import dotenv from 'dotenv';
 
-dotenv.config({ path: path.resolve(__dirname, '../.env') })
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 interface ENV {
   NODE_ENV: string | undefined;
@@ -12,6 +12,8 @@ interface ENV {
   DB_USERNAME: string | undefined;
   DB_PASSWORD: string | undefined;
   DB_DATABASE: string | undefined;
+  JWT_SECRET: string | undefined;
+  JWT_EXPIRES: string | undefined;
 }
 
 interface Config {
@@ -23,6 +25,8 @@ interface Config {
   DB_USERNAME: string;
   DB_PASSWORD: string;
   DB_DATABASE: string;
+  JWT_SECRET: string;
+  JWT_EXPIRES: string;
 }
 
 const getRawConfig = (): ENV => {
@@ -35,21 +39,22 @@ const getRawConfig = (): ENV => {
     DB_USERNAME: process.env.DB_USERNAME,
     DB_PASSWORD: process.env.DB_PASSWORD,
     DB_DATABASE: process.env.DB_DATABASE,
-  }
-}
+    JWT_SECRET: process.env.JWT_SECRET,
+    JWT_EXPIRES: process.env.JWT_EXPIRES,
+  };
+};
 
 const getConfig = (config: ENV): Config => {
   for (const [key, value] of Object.entries(config)) {
     if (value === undefined) {
-      throw new Error(`Missing key ${key} in config.env`)
+      throw new Error(`Missing key ${key} in config.env`);
     }
   }
   return config as Config;
-}
+};
 
-const config = getConfig(getRawConfig())
+const config = getConfig(getRawConfig());
 
-export const isDev = (config.NODE_ENV === 'development')
+export const isDev = config.NODE_ENV === 'development';
 
-export default config
-
+export default config;

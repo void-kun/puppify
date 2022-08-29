@@ -1,11 +1,9 @@
-import { Router, Request, Response } from 'express'
+import { Router } from 'express';
+import { PATH } from '../utils/constant';
+import AuthRouter from './auth.routes';
 
-const router = Router()
+const router = Router();
 
-router.get('/', (_req: Request, res: Response) => {
-  res.send({
-    message: 'hello world'
-  })
-})
+router.use(PATH._AUTH, AuthRouter);
 
 export default router;

@@ -1,3 +1,5 @@
 export const enum PATH {
-  _LOGIN = '/login'
+  _AUTH = '/auth',
+  _LOGIN = '/login',
+  _REGISTER = '/register',
 }

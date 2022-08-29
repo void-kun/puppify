@@ -13,7 +13,7 @@ import ErrorHandler from './middlewares/errorHandler';
 import config from './config';
 import router from './routes';
 import logger from './utils/logger';
-import { database } from './config/database';
+import { AppDataSource } from './config/database';
 
 class Vault {
   private app: Application;
@@ -41,8 +41,7 @@ class Vault {
 }
 
 const createInstance = async () => {
-  await database
-    .initialize()
+  await AppDataSource.initialize()
     .then(() => {
       logger.info('Database connected!');
     })
